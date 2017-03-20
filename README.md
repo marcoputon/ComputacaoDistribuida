@@ -1,2 +1,2 @@
 # ComputacaoDistribuida
-Repositorio destinado aos trabalhos da disciplina de Computaçao Distribuida
+Repositorio destinado aos trabalhos da disciplina de Computação Distribuída
