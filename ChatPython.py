@@ -4,12 +4,12 @@ app = Bottle()
 history = []
 
     
-@app.get('/login') # or @route('/login')
+@app.get('/cliente') # or @route('/login')
 def login():
 	global history
 
 	a = '''
-        <form action="/login" method="post">
+        <form action="/servidor" method="post">
             Username: <input name="username" type="text" />
             text: <input name="text" type="text" />
             <input value="Send" type="submit" />
@@ -21,12 +21,13 @@ def login():
 		
 	return a
 
-@app.post('/login') # or @route('/login', method='POST')
+
+@app.post('/servidor') # or @route('/login', method='POST')
 def do_login():
 	t = request.forms.get('text')
 	u = request.forms.get('username')
 	
 	history.append([u, t])
-	redirect("/login")
+	redirect("/cliente")
 
 run(app, host='localhost', port=8080)
