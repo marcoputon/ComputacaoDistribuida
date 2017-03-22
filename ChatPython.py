@@ -3,16 +3,6 @@ from bottle import Bottle, run, template, route, get, post, request, redirect
 app = Bottle()
 history = []
 
-@app.route('/')
-def hello():
-    return "Hello World!"
-
-@app.route('/hello')
-@app.route('/hello/<name>')
-def greet(name='Stranger'):
-    return template('Hello {{name}}, how are you?', name=name)
-    
-    
     
 @app.get('/login') # or @route('/login')
 def login():
