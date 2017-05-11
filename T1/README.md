@@ -1,5 +1,6 @@
-# T1
-Para executar, use o comando:
-$ python3 ChatPython.py
+Para executar, digite o comando:
+$ python3 chat.py <port>
 
-Vá no seu navegador e acesse o link localhost:8080/cliente
+Sendo <port> a porta que será utiliza pelo servidor. Ex.: 8080
+
+Após, abra seu navegador e acesse o link 'localhost:<port>/'
