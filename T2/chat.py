@@ -68,7 +68,6 @@ def receive_msg():
             try:
                 new_h = requests.get(peer + "/history")
                 new_h = json.loads(new_h.text)
-                print(new_h)
                 for m in new_h:
                     if m not in history:
                         history.append(m)
