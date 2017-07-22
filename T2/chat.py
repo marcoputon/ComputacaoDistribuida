@@ -83,4 +83,4 @@ t_chat  =   threading.Thread(target = receive_msg)
 t_peers.start()
 t_chat.start()
 
-run(host = 'localhost', port = port_)
+run(host = '192.168.0.8', port = port_)
