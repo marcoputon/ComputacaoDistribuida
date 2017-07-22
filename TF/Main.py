@@ -30,7 +30,7 @@ init_pos = [10, 10]
 my_ip = "192.168.0.8"
 my_port = "8000"
 my_id = my_ip + ":" + my_port
-players = {my_id:[init_pos]}
+players = {my_id:[init_pos], "192.168.0.2:8000":[1, 1]}
 
 
 print("resolution:", DISPLAY)
