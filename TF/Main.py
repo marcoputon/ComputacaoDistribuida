@@ -27,10 +27,10 @@ player = Cycle((24,202,230), [0, 0])
 arena = Board(arena_size, player, cell_size, (5,13,16))
 
 init_pos = [10, 10]
-my_ip = "192.168.0.8"
+my_ip = "http://192.168.0.8"
 my_port = "8000"
 my_id = my_ip + ":" + my_port
-players = {my_id:[init_pos], "192.168.0.2:8000":[1, 1]}
+players = {my_id:[init_pos], "http://192.168.0.2:8000":[1, 1]}
 
 
 print("resolution:", DISPLAY)
@@ -124,6 +124,7 @@ def receive_msg():
     while True:
         for peer in players:
             try:
+                print(peer + "/get_moves")
                 new_h = requests.get(peer + "/get_moves")
                 new_h = json.loads(new_h.text)
                 print(new_h)
