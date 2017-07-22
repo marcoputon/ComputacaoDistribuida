@@ -52,5 +52,3 @@ class Cycle:
         self.position[0] += self.direction[0]
         self.position[1] += self.direction[1]
         self.distance += 1
-
-        print(self.path)
