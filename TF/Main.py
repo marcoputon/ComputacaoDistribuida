@@ -23,14 +23,14 @@ DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 screen = display.set_mode(DISPLAY)
 display.set_caption("Pytron")
 
-player = Cycle((24,202,230), [0, 0])
+player = Cycle((24, 202, 230), [0, 0])
 arena = Board(arena_size, player, cell_size, (5,13,16))
 
 init_pos = [10, 10]
-my_ip = "http://192.168.0.8"
+my_ip = "192.168.0.8"
 my_port = "8000"
 my_id = my_ip + ":" + my_port
-players = {my_id:[init_pos], "http://192.168.0.2:8000":[1, 1]}
+players = {my_id:[init_pos, player.color, player.path, True]}
 
 
 print("resolution:", DISPLAY)
@@ -71,11 +71,13 @@ def main():
                         arena.player.change_direction("r")
                         arena.player.save_move("r")
                         players[my_id] = [init_pos] + player.path
+                else:
+                    players[my_id][3] = False
 
         if not arena.player.alive:
             flag = True
             for i in players:
-                if players[i] == True:
+                if players[i][3] == True:
                     flag = False
                     break
             if flag:
@@ -131,7 +133,7 @@ def receive_msg():
             except:
                 pass
 
-            time.sleep(1)
+            time.sleep(0.5)
 
 def server():
     run(host = my_ip, port = my_port)
