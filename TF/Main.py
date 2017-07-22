@@ -32,6 +32,8 @@ my_port = "8000"
 my_id = my_ip + ":" + my_port
 players = {my_id:[init_pos, player.color, player.path, False]}
 
+peers = ["http://192.168.0.8:8000"]
+
 
 print("resolution:", DISPLAY)
 
@@ -122,8 +124,36 @@ def count_down(arena):
 ''' BOTTLE STUFF '''
 @get('/get_moves')
 def index():
-	return json.dumps(players[my_id])
+	return json.dumps(players)
 
+@get('/peers')
+def index():
+	return json.dumps(peers)
+
+
+def get_peers():
+    while True:
+        for peer in peers:
+            try:
+                new_peers = requests.get(peer + "/peers")
+                new_peers = json.loads(new_peers.text)
+                for np in new_peers:
+                    if np not in peers:
+                        peers.append(np)
+
+                        try:
+                            print(peer + "/get_moves")
+                            new_h = requests.get(peer + "/get_moves")
+                            new_h = json.loads(new_h.text)
+
+                            print(new_h)
+                        except:
+                            pass
+
+
+            except:
+                pass
+            time.sleep(0.1)
 
 def receive_msg():
     while True:
