@@ -30,7 +30,7 @@ init_pos = [10, 10]
 my_ip = "192.168.0.8"
 my_port = "8000"
 my_id = my_ip + ":" + my_port
-players = {my_id:[init_pos, player.color, player.path, True]}
+players = {my_id:[init_pos, player.color, player.path, False]}
 
 
 print("resolution:", DISPLAY)
@@ -55,22 +55,26 @@ def main():
                     if event.key == pygame.K_DOWN:
                         arena.player.change_direction("d")
                         arena.player.save_move("d")
-                        players[my_id] = [init_pos] + player.path
+                        players[my_id][0] = [init_pos]
+                        players[my_id][2] = player.path
 
                     if event.key == pygame.K_UP:
                         arena.player.change_direction("u")
                         arena.player.save_move("u")
-                        players[my_id] = [init_pos] + player.path
+                        players[my_id][0] = [init_pos]
+                        players[my_id][2] = player.path
 
                     if event.key == pygame.K_LEFT:
                         arena.player.change_direction("l")
                         arena.player.save_move("l")
-                        players[my_id] = [init_pos] + player.path
+                        players[my_id][0] = [init_pos]
+                        players[my_id][2] = player.path
 
                     if event.key == pygame.K_RIGHT:
                         arena.player.change_direction("r")
                         arena.player.save_move("r")
-                        players[my_id] = [init_pos] + player.path
+                        players[my_id][0] = [init_pos]
+                        players[my_id][2] = player.path
                 else:
                     players[my_id][3] = False
 
@@ -93,7 +97,6 @@ def main():
 
 def restart(arena):
     arena.restart()
-    players[my_id] = [init_pos]
     count_down(arena)
 
 
