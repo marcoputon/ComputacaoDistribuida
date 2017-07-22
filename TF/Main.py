@@ -32,7 +32,7 @@ my_port = "8000"
 my_id = my_ip + ":" + my_port
 players = {my_id:[init_pos, player.color, player.path, False]}
 
-peers = ["http://192.168.0.8:8000"]
+peers = ["http://192.168.0.2:8000"]
 
 
 print("resolution:", DISPLAY)
@@ -83,6 +83,7 @@ def main():
         if not arena.player.alive:
             flag = True
             for i in players:
+                print(i)
                 if players[i][3] == True:
                     flag = False
                     break
@@ -90,7 +91,9 @@ def main():
                 restart(arena)
 
         arena.update()
-
+        for i in players:
+            print(i, players[i])
+            print()
         arena.draw(screen)
         pygame.display.update()
         time.sleep(0.02)
@@ -98,6 +101,8 @@ def main():
 
 
 def restart(arena):
+    for i in players:
+        players[i][2] = []
     arena.restart()
     count_down(arena)
 
@@ -120,49 +125,22 @@ def count_down(arena):
 
 
 
-
 ''' BOTTLE STUFF '''
 @get('/get_moves')
 def index():
 	return json.dumps(players)
 
-@get('/peers')
-def index():
-	return json.dumps(peers)
-
-
-def get_peers():
-    while True:
-        for peer in peers:
-            try:
-                new_peers = requests.get(peer + "/peers")
-                new_peers = json.loads(new_peers.text)
-                for np in new_peers:
-                    if np not in peers:
-                        peers.append(np)
-
-                        try:
-                            print(peer + "/get_moves")
-                            new_h = requests.get(peer + "/get_moves")
-                            new_h = json.loads(new_h.text)
-
-                            print(new_h)
-                        except:
-                            pass
-
-
-            except:
-                pass
-            time.sleep(0.1)
 
 def receive_msg():
     while True:
-        for peer in players:
+        for peer in list(players.keys()) + peers:
             try:
-                print(peer + "/get_moves")
                 new_h = requests.get(peer + "/get_moves")
                 new_h = json.loads(new_h.text)
-                print(new_h)
+                print(peer)
+                for i in new_h:
+                    players[i] = new_h[i]
+
             except:
                 pass
 
@@ -172,9 +150,11 @@ def server():
     run(host = my_ip, port = my_port)
 
 receive_t  =   threading.Thread(target = receive_msg)
+#peers_t  =   threading.Thread(target = get_peers)
 server_t   =   threading.Thread(target = server)
 game_t   =   threading.Thread(target = main)
 
 receive_t.start()
+#peers_t.start()
 server_t.start()
 game_t.start()
