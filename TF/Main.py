@@ -53,6 +53,8 @@ def main():
 
                 #   move o player se estiver vivo
                 if arena.player.alive:
+
+                    print("TA VIVOOOOO")
                     # Player keys
                     if event.key == pygame.K_DOWN:
                         arena.player.change_direction("d")
@@ -80,15 +82,20 @@ def main():
                 else:
                     players[my_id][3] = False
 
-        if not arena.player.alive:
-            flag = True
-            for i in players:
+
+        flag = True
+        for i in players:
+            print(i,  "DESGRAÇAAAAA")
+            if players[i][3] == True:
+                print("TEM ALGUEM VIVO")
                 print(i)
-                if players[i][3] == True:
-                    flag = False
-                    break
-            if flag:
-                restart(arena)
+                print()
+                flag = False
+                break
+        if flag:
+            print("TA TUDO MORTO")
+            restart(arena)
+
 
         arena.update()
         for i in players:
@@ -104,6 +111,8 @@ def restart(arena):
     for i in players:
         players[i][2] = []
     arena.restart()
+    players[my_id][3] = True
+    player.alive = True
     count_down(arena)
 
 
