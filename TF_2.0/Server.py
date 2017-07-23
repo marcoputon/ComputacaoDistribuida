@@ -16,12 +16,13 @@ try:
     peers_dict = {}
     for i in peers:
         peers_dict[i] = False
+    peers_dict["http://" + my_ip + ":" + str(port_)] = True
 except:
     print("Please inform a valid list of peers.\n")
     exit(0)
 
-
-data_set = []
+my_motor_cycle = "Perdi" # Moto do server atual
+motor_cycles = {"http://" + my_ip + ":" + str(port_):my_motor_cycle} # Inicia com a moto do server atual
 
 
 @get('/peers')
@@ -30,8 +31,10 @@ def index():
 
 @get('/get_data')
 def index():
-	return json.dumps(data_set)
+	return json.dumps(motor_cycles)
 
+
+''' Funções das Threads '''
 # Pegar a lista de peers de outros servidores
 def get_peers():
     while True:
@@ -40,7 +43,7 @@ def get_peers():
                 new_peers = requests.get(peer + "/peers")
                 new_peers = json.loads(new_peers.text)
                 for np in new_peers:
-                    if np not in peers and d != "http://" + my_ip:
+                    if np not in peers and peer != "http://" + my_ip:
                         peers.append(np)
             except:
                 pass
@@ -50,37 +53,41 @@ def get_peers():
 def get_data():
     while True:
         for peer in peers:
+            #if peer != "http://" + my_ip:
             try:
                 row_data = requests.get(peer + "/get_data")
                 data = json.loads(row_data.text)
-                for d in data:
-                    print(d, "http://" + my_ip)
-                    if d not in data_set:
-                        data_set.append(d)
                 peers_dict[peer] = True
+                for d in data:
+                    if d not in motor_cycles:
+                        motor_cycles[d] = data[d]
             except:
                 peers_dict[peer] = False
             time.sleep(0.5)
+
 
 # Tratar eventos
 def get_events():
     while True:
         data = input()
-        data_set.append(data)
+        motor_cycles.append(data)
+
 
 # Exibir localmente
 def show_data():
     while True:
-        for i in data_set:
+        print("motor_cycles")
+        for i in motor_cycles:
             print(i)
 
+        print("peers_dict")
         for i in peers_dict:
             print(i, peers_dict[i])
 
         time.sleep(1)
 
 
-### Threads ###
+######## Threads ########
 t1_dados    = threading.Thread(target = get_data)
 t2_eventos  = threading.Thread(target = get_events)
 t3_local    = threading.Thread(target = show_data)
@@ -90,7 +97,7 @@ t1_dados.start()
 t2_eventos.start()
 t3_local.start()
 t4_peers.start()
-###############
+########################
 
 
 run(host = my_ip, port = port_, quiet = True)
