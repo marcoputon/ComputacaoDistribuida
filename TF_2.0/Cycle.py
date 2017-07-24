@@ -16,8 +16,7 @@ class Cycle:
              "direction":self.direction,
              "path":self.path,
              "alive":self.alive
-            }
-
+        }
         return d
 
     def start(self, pos, direction):

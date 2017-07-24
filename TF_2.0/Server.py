@@ -5,7 +5,6 @@ from general import *
 
 
 pygame.display.init()
-screen = pygame.display.set_mode((100, 100))
 
 
 
@@ -42,6 +41,7 @@ my_id = "http://" + my_ip + ":" + str(port_)
 board_size = (128, 72)
 cell_size = 6
 players = {}
+screen = pygame.display.set_mode((board_size[0] * cell_size, board_size[1] * cell_size))
 ##############################################################################
 
 #################################### INIT ####################################
@@ -105,27 +105,44 @@ def get_events():
 
                 # Player keys
                 if event.key == pygame.K_DOWN:
-                    players[my_id].path.append(["D", (0, 0)])
+                    players[my_id].path.append(["d", (0, 0)])
+                    players[my_id].change_direction('d')
+
 
                 if event.key == pygame.K_UP:
-                    players[my_id].path.append(["U", (0, 0)])
+                    players[my_id].path.append(["u", (0, 0)])
+                    players[my_id].change_direction('u')
 
                 if event.key == pygame.K_LEFT:
-                    players[my_id].path.append(["L", (0, 0)])
+                    players[my_id].path.append(["l", (0, 0)])
+                    players[my_id].change_direction('l')
 
                 if event.key == pygame.K_RIGHT:
-                    players[my_id].path.append(["R", (0, 0)])
+                    players[my_id].path.append(["r", (0, 0)])
+                    players[my_id].change_direction('r')
+
+
+''' Cores
+background: (40, 44, 52)
+motos:
+    azul ciano: (0, 255, 255)
+    amarelo:    (255, 194, 23)
+    laranja:    (255, 60, 46)
+    rosa:       (148, 4, 94)
+'''
 
 
 # Exibir localmente
 def show_data():
+    screen.fill((40, 44, 52))
     while True:
-        print("motor_cycles - BEGIN")
         for i in players:
-            print(players[i].position, players[i].direction)
-        print("motor_cycles - END")
+            players[i].update()
+            pygame.draw.rect(screen, (0, 255, 255), (players[i].position[0] * cell_size, players[i].position[1] * cell_size, cell_size, cell_size), 0)
 
-        time.sleep(1)
+        pygame.display.update()
+        time.sleep(0.001)
+
 ''' ####################################################################### '''
 
 
