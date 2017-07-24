@@ -91,32 +91,31 @@ def get_events():
 
                 # Player keys
                 if event.key == pygame.K_DOWN:
-                    motor_cycles[my_id].path.append(["D", (0, 0, 0)])
+                    motor_cycles[my_id].path.append(["D", (0, 0)])
 
                 if event.key == pygame.K_UP:
-                    motor_cycles[my_id].path.append(["U", (0, 0, 0)])
+                    motor_cycles[my_id].path.append(["U", (0, 0)])
 
                 if event.key == pygame.K_LEFT:
-                    motor_cycles[my_id].path.append(["L", (0, 0, 0)])
+                    motor_cycles[my_id].path.append(["L", (0, 0)])
 
                 if event.key == pygame.K_RIGHT:
-                    motor_cycles[my_id].path.append(["R", (0, 0, 0)])
+                    motor_cycles[my_id].path.append(["R", (0, 0)])
 
 
 # Exibir localmente
 def show_data():
     while True:
-        '''
         print("motor_cycles - BEGIN")
         for i in motor_cycles:
-            print(i, motor_cycles[i].color)
+            print(motor_cycles[my_id].path)
         print("motor_cycles - END")
+        '''
 
         print("peers_dict")
         for i in peers_dict:
             print(i, peers_dict[i])
         '''
-        print(motor_cycles[my_id].path)
         time.sleep(1)
 
 

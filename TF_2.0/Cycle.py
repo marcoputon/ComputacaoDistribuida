@@ -4,10 +4,10 @@ from general import *
 class Cycle:
     def __init__(self, color=None, direct=None, pos=None, path=[], alive=False):
         self.color = color          # (r, g, b)
-        self.position = None        # [x, y]
+        self.position = pos        # [x, y]
         self.direction = direct     # [x, y]
-        self.path = []
-        self.alive = False
+        self.path = path
+        self.alive = alive
 
 
     def to_dict(self):
