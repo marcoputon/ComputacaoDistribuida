@@ -18,7 +18,7 @@ class Game:
         self.id = self.ip + ":" + str(self.port)
         self.players = {}
 
-        self.peers = []
+        self.peers = ["http://172.20.84.113:8000"]
 
         # Threads
         self.t_get_data      = threading.Thread(target = self.get_data)
@@ -59,6 +59,9 @@ class Game:
         self.t_show_data.start()
         self.t_get_peers.start()
 
+    def dict_to_cycle(self, d):
+        return Cycle(d["color"], d["position"], d["direction"], d["path"], d["alive"])
+
     # Pegar a lista de peers de outros servidores
     def get_peers(self):
         while True:
@@ -80,9 +83,10 @@ class Game:
                 try:
                     row_data = requests.get(peer + "/get_data")
                     data = json.loads(row_data.text)
+                    print("perdi", data)
                     for d in data:
                         if d != self.id:
-                            self.players[d] = dict_to_cycle(data[d])
+                            self.players[d] = self.dict_to_cycle(data[d])
                 except:
                     pass
                 time.sleep(0.1)
@@ -91,7 +95,7 @@ class Game:
     def show_data(self):
         while True:
             for i in self.players:
-                print(self.players[i].path)
+                print(i, self.players[i].path)
             time.sleep(0.1)
 
     # Tratar eventos
@@ -117,7 +121,11 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         self.players[self.id].save_move('r')
 
-
+def list_to_dict(l):
+    nd = {}
+    for i in l:
+        nd[i] = l[i].to_dict()
+    return nd
 
 @get('/peers')
 def index():
