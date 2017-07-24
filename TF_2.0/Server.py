@@ -73,7 +73,7 @@ def get_peers():
                         peers.append(np)
             except:
                 pass
-            time.sleep(0.1)
+        time.sleep(0.05)
 
 
 # Pegar os dados com outros dervidores
@@ -90,7 +90,7 @@ def get_data():
                         players[d] = dict_to_cycle(data[d])
             except:
                 peers_dict[peer] = False
-            time.sleep(0.5)
+        time.sleep(0.05)
 
 
 # Tratar eventos
@@ -105,21 +105,22 @@ def get_events():
 
                 # Player keys
                 if event.key == pygame.K_DOWN:
-                    players[my_id].path.append(["d", (0, 0)])
+                    players[my_id].path.append(["d", players[my_id].position])
                     players[my_id].change_direction('d')
 
 
                 if event.key == pygame.K_UP:
-                    players[my_id].path.append(["u", (0, 0)])
+                    players[my_id].path.append(["u", players[my_id].position])
                     players[my_id].change_direction('u')
 
                 if event.key == pygame.K_LEFT:
-                    players[my_id].path.append(["l", (0, 0)])
+                    players[my_id].path.append(["l", players[my_id].position])
                     players[my_id].change_direction('l')
 
                 if event.key == pygame.K_RIGHT:
-                    players[my_id].path.append(["r", (0, 0)])
+                    players[my_id].path.append(["r", players[my_id].position])
                     players[my_id].change_direction('r')
+        time.sleep(0.05)
 
 
 ''' Cores
@@ -138,10 +139,10 @@ def show_data():
     while True:
         for i in players:
             players[i].update()
-            pygame.draw.rect(screen, (0, 255, 255), (players[i].position[0] * cell_size, players[i].position[1] * cell_size, cell_size, cell_size), 0)
+            pygame.draw.rect(screen, players[i].color, (players[i].position[0] * cell_size, players[i].position[1] * cell_size, cell_size, cell_size), 0)
 
         pygame.display.update()
-        time.sleep(0.001)
+        time.sleep(0.05)
 
 ''' ####################################################################### '''
 
