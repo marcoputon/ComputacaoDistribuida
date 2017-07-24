@@ -108,7 +108,7 @@ def show_data():
     while True:
         print("motor_cycles - BEGIN")
         for i in motor_cycles:
-            print(motor_cycles[my_id].path)
+            print(motor_cycles[i].path)
         print("motor_cycles - END")
         '''
 
