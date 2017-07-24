@@ -4,7 +4,6 @@ from Cycle import *
 from general import *
 
 
-
 pygame.display.init()
 screen = pygame.display.set_mode((100, 100))
 
@@ -21,6 +20,7 @@ except:
     print("Please inform a valid port.\n")
     exit(0)
 
+
 try:
     peers = sys.argv[2:]
     print(peers)
@@ -33,9 +33,21 @@ except:
     print("Please inform a valid list of peers.\n")
     exit(0)
 
+
+
+
+################################## GLOBAIS ####################################
 my_id = "http://" + my_ip + ":" + str(port_)
-my_motor_cycle = Cycle((1, 2, 3)) # Moto do server atual
-motor_cycles = {my_id:my_motor_cycle} # Inicia com a moto do server atual
+
+board_size = (128, 72)
+cell_size = 6
+players = {}
+##############################################################################
+
+#################################### INIT ####################################
+players[my_id] = Cycle((0, 255, 255), dir_dict['r'], [10, 10])
+###############################################################################
+
 
 
 @get('/peers')
@@ -44,10 +56,11 @@ def index():
 
 @get('/get_data')
 def index():
-	return json.dumps(list_to_dict(motor_cycles))
+	return json.dumps(list_to_dict(players))
 
 
-''' Funções das Threads '''
+
+''' ########################## Funções das Threads ##########################'''
 # Pegar a lista de peers de outros servidores
 def get_peers():
     while True:
@@ -62,6 +75,7 @@ def get_peers():
                 pass
             time.sleep(0.1)
 
+
 # Pegar os dados com outros dervidores
 def get_data():
     while True:
@@ -73,7 +87,7 @@ def get_data():
                 peers_dict[peer] = True
                 for d in data:
                     if d != my_id:
-                        motor_cycles[d] = dict_to_cycle(data[d])
+                        players[d] = dict_to_cycle(data[d])
             except:
                 peers_dict[peer] = False
             time.sleep(0.5)
@@ -91,34 +105,32 @@ def get_events():
 
                 # Player keys
                 if event.key == pygame.K_DOWN:
-                    motor_cycles[my_id].path.append(["D", (0, 0)])
+                    players[my_id].path.append(["D", (0, 0)])
 
                 if event.key == pygame.K_UP:
-                    motor_cycles[my_id].path.append(["U", (0, 0)])
+                    players[my_id].path.append(["U", (0, 0)])
 
                 if event.key == pygame.K_LEFT:
-                    motor_cycles[my_id].path.append(["L", (0, 0)])
+                    players[my_id].path.append(["L", (0, 0)])
 
                 if event.key == pygame.K_RIGHT:
-                    motor_cycles[my_id].path.append(["R", (0, 0)])
+                    players[my_id].path.append(["R", (0, 0)])
 
 
 # Exibir localmente
 def show_data():
     while True:
         print("motor_cycles - BEGIN")
-        for i in motor_cycles:
-            print(motor_cycles[i].path)
+        for i in players:
+            print(players[i].position, players[i].direction)
         print("motor_cycles - END")
-        '''
 
-        print("peers_dict")
-        for i in peers_dict:
-            print(i, peers_dict[i])
-        '''
         time.sleep(1)
+''' ####################################################################### '''
 
 
+
+########################## Funções de escrita na rede #########################
 def dict_to_cycle(d):
     return Cycle(d["color"], d["direction"], d["position"], d["path"], d["alive"])
 
@@ -127,19 +139,19 @@ def list_to_dict(l):
     for i in l:
         nd[i] = l[i].to_dict()
     return nd
+###############################################################################
 
+################################### Threads ###################################
+t_get_data      = threading.Thread(target = get_data)
+t_get_events    = threading.Thread(target = get_events)
+t_show_data     = threading.Thread(target = show_data)
+t_get_peers     = threading.Thread(target = get_peers)
 
-######## Threads ########
-t1_dados    = threading.Thread(target = get_data)
-t2_eventos  = threading.Thread(target = get_events)
-t3_local    = threading.Thread(target = show_data)
-t4_peers    = threading.Thread(target = get_peers)
-
-t1_dados.start()
-t2_eventos.start()
-t3_local.start()
-t4_peers.start()
-########################
+t_get_data.start()
+t_get_events.start()
+t_show_data.start()
+t_get_peers.start()
+###############################################################################
 
 
 run(host = my_ip, port = port_, quiet = True)
