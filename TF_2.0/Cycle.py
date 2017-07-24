@@ -2,13 +2,23 @@ import pygame
 from general import *
 
 class Cycle:
-    def __init__(self, color, direct):
+    def __init__(self, color=None, direct=None, pos=None, path=[], alive=False):
         self.color = color          # (r, g, b)
         self.position = None        # [x, y]
         self.direction = direct     # [x, y]
         self.path = []
         self.alive = False
 
+
+    def to_dict(self):
+        d = {"color":self.color,
+             "position":self.position,
+             "direction":self.direction,
+             "path":self.path,
+             "alive":self.alive
+            }
+
+        return d
 
     def start(self, pos, direction):
         self.direction = dir_dict[direction]

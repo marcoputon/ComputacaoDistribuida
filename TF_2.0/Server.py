@@ -1,5 +1,7 @@
 from bottle import run, get, post, view, redirect, request
 import requests, bottle, json, threading, time, sys, socket, pygame
+from Cycle import *
+from general import *
 
 my_ip = socket.gethostbyname(socket.gethostname())
 
@@ -21,7 +23,7 @@ except:
     print("Please inform a valid list of peers.\n")
     exit(0)
 
-my_motor_cycle = "Perdi" # Moto do server atual
+my_motor_cycle = Cycle() # Moto do server atual
 motor_cycles = {"http://" + my_ip + ":" + str(port_):my_motor_cycle} # Inicia com a moto do server atual
 
 
@@ -31,7 +33,7 @@ def index():
 
 @get('/get_data')
 def index():
-	return json.dumps(motor_cycles)
+	return json.dumps(list_to_dict(motor_cycles))
 
 
 ''' Funções das Threads '''
@@ -59,8 +61,7 @@ def get_data():
                 data = json.loads(row_data.text)
                 peers_dict[peer] = True
                 for d in data:
-                    if d not in motor_cycles:
-                        motor_cycles[d] = data[d]
+                    motor_cycles[d] = dict_to_cycle(data[d])
             except:
                 peers_dict[peer] = False
             time.sleep(0.5)
@@ -76,15 +77,27 @@ def get_events():
 # Exibir localmente
 def show_data():
     while True:
-        print("motor_cycles")
+        print("motor_cycles - BEGIN")
         for i in motor_cycles:
-            print(i)
+            print(i, motor_cycles[i])
+        print("motor_cycles - END")
 
+        '''
         print("peers_dict")
         for i in peers_dict:
             print(i, peers_dict[i])
-
+        '''
         time.sleep(1)
+
+
+def dict_to_cycle(d):
+    return Cycle(d["color"], d["direction"], d["position"], d["path"], d["alive"])
+
+def list_to_dict(l):
+    nd = {}
+    for i in l:
+        nd[i] = l[i].to_dict()
+    return nd
 
 
 ######## Threads ########
