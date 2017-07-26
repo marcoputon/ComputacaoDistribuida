@@ -177,7 +177,7 @@ def show_data():
 
 ########################## Funções de escrita na rede #########################
 def dict_to_cycle(d):
-    return Cycle(d["color"], d["direction"], d["position"], d["path"], d["alive"])
+    return Cycle(tuple(d["color"]), tuple(d["direction"]), d["position"], d["path"], d["alive"])
 
 def list_to_dict(l):
     nd = {}
