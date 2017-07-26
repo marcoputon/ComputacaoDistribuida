@@ -53,7 +53,7 @@ screen = pygame.display.set_mode((board_size[0] * cell_size, board_size[1] * cel
 ##############################################################################
 
 #################################### INIT ####################################
-players[my_id] = Cycle((255, 194, 23), dir_dict['r'], [60, 60])
+players[my_id] = Cycle((0, 255, 255), dir_dict['r'], [60, 60])
 ###############################################################################
 
 
@@ -147,10 +147,10 @@ def show_data():
                 pygame.draw.rect(screen, players[p].color, rect, 0)
 
                 c += 1
-        c2 = len(players[p].path) - 1
-        p_atual = [dict_dir[players[p].direction], players[p].position]
-        rect = path_to_rect(players[p].path[c2], p_atual, cell_size)
-        pygame.draw.rect(screen, players[p].color, rect, 0)
+            c2 = len(players[p].path) - 1
+            p_atual = [dict_dir[players[p].direction], players[p].position]
+            rect = path_to_rect(players[p].path[c2], p_atual, cell_size)
+            pygame.draw.rect(screen, players[p].color, rect, 0)
 
 
 
