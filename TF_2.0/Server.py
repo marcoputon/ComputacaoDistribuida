@@ -53,7 +53,7 @@ screen = pygame.display.set_mode((board_size[0] * cell_size, board_size[1] * cel
 ##############################################################################
 
 #################################### INIT ####################################
-players[my_id] = Cycle((0, 255, 255), dir_dict['r'], [60, 60])
+players[my_id] = Cycle((255, 194, 23), dir_dict['r'], [60, 60])
 ###############################################################################
 
 
@@ -98,7 +98,7 @@ def get_data():
                 for d in data:
                     if d != my_id:
                         players[d] = dict_to_cycle(data[d])
-            except:
+            except Exception as e:
                 peers_dict[peer] = False
         time.sleep(0.05)
 
