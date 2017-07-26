@@ -34,6 +34,14 @@ except:
 
 
 
+''' Cores
+background: (40, 44, 52)
+motos:
+azul ciano: (0, 255, 255)
+amarelo:    (255, 194, 23)
+laranja:    (255, 60, 46)
+rosa:       (148, 4, 94)
+'''
 
 ################################## GLOBAIS ####################################
 my_id = "http://" + my_ip + ":" + str(port_)
@@ -45,11 +53,12 @@ screen = pygame.display.set_mode((board_size[0] * cell_size, board_size[1] * cel
 ##############################################################################
 
 #################################### INIT ####################################
-players[my_id] = Cycle((0, 255, 255), dir_dict['r'], [10, 10])
+players[my_id] = Cycle((255, 194, 23), dir_dict['r'], [60, 60])
 ###############################################################################
 
 
 
+#################################### Bottle ###################################
 @get('/peers')
 def index():
 	return json.dumps(peers)
@@ -57,6 +66,7 @@ def index():
 @get('/get_data')
 def index():
 	return json.dumps(list_to_dict(players))
+###############################################################################
 
 
 
@@ -105,36 +115,53 @@ def get_events():
 
                 # Player keys
                 if event.key == pygame.K_DOWN:
-                    players[my_id].path.append(["d", players[my_id].position])
+                    players[my_id].path.append(["d", [players[my_id].position[0], players[my_id].position[1]]])
                     players[my_id].change_direction('d')
 
-
                 if event.key == pygame.K_UP:
-                    players[my_id].path.append(["u", players[my_id].position])
+                    players[my_id].path.append(["u", [players[my_id].position[0], players[my_id].position[1]]])
                     players[my_id].change_direction('u')
 
                 if event.key == pygame.K_LEFT:
-                    players[my_id].path.append(["l", players[my_id].position])
+                    players[my_id].path.append(["l", [players[my_id].position[0], players[my_id].position[1]]])
                     players[my_id].change_direction('l')
 
                 if event.key == pygame.K_RIGHT:
-                    players[my_id].path.append(["r", players[my_id].position])
+                    players[my_id].path.append(["r", [players[my_id].position[0], players[my_id].position[1]]])
                     players[my_id].change_direction('r')
         time.sleep(0.05)
 
 
-''' Cores
-background: (40, 44, 52)
-motos:
-    azul ciano: (0, 255, 255)
-    amarelo:    (255, 194, 23)
-    laranja:    (255, 60, 46)
-    rosa:       (148, 4, 94)
-'''
 
 
 # Exibir localmente
 def show_data():
+    while True:
+        screen.fill((40, 44, 52))
+        for p in players:
+            players[p].update(cell_size)
+            c = 0
+            for m in players[p].path[1:]:
+                c2 = c + 1
+                rect = path_to_rect(players[p].path[c], players[p].path[c2], cell_size)
+                pygame.draw.rect(screen, players[p].color, rect, 0)
+
+                c += 1
+        c2 = len(players[p].path) - 1
+        p_atual = [dict_dir[players[p].direction], players[p].position]
+        rect = path_to_rect(players[p].path[c2], p_atual, cell_size)
+        pygame.draw.rect(screen, players[p].color, rect, 0)
+
+
+
+        pygame.display.update()
+        time.sleep(0.05)
+
+
+
+
+
+'''
     screen.fill((40, 44, 52))
     while True:
         for i in players:
@@ -142,8 +169,8 @@ def show_data():
             pygame.draw.rect(screen, players[i].color, (players[i].position[0] * cell_size, players[i].position[1] * cell_size, cell_size, cell_size), 0)
 
         pygame.display.update()
-        time.sleep(0.05)
-
+        time.sleep(0.02)
+'''
 ''' ####################################################################### '''
 
 

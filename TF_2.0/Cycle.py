@@ -4,9 +4,10 @@ from general import *
 class Cycle:
     def __init__(self, color=None, direct=None, pos=None, path=[], alive=False):
         self.color = color          # (r, g, b)
-        self.position = pos        # [x, y]
+        self.position = pos         # [x, y]
         self.direction = direct     # [x, y]
         self.path = path
+        self.path.append([dict_dir[direct], [self.position[0], self.position[1]]])
         self.alive = alive
 
 
@@ -24,28 +25,22 @@ class Cycle:
         self.path.append([direction, self.position])
         self.position = pos
 
-
-    def save_move(self, move):
-        if self.path[-1][0] != move:
-            self.path.append([move, self.position])
-
-
     # Precisa dos condicionais para evitar voltar na posição oposta
     def change_direction(self, direction):
         if direction == "l":    # left
-            if self.direction != [1, 0]:
+            if self.direction != (1, 0):
                 self.direction = dir_dict['l']
 
         elif direction == "r":  # right
-            if self.direction != [-1, 0]:
+            if self.direction != (-1, 0):
                 self.direction = dir_dict['r']
 
         elif direction == "u":  # up
-            if self.direction != [0, 1]:
+            if self.direction != (0, 1):
                 self.direction = dir_dict['u']
 
         elif direction == "d":  # down
-            if self.direction != [0, -1]:
+            if self.direction != (0, -1):
                 self.direction = dir_dict['d']
 
         else:
@@ -53,6 +48,6 @@ class Cycle:
             exit(0)
 
 
-    def update(self):
-        self.position[0] += self.direction[0]
-        self.position[1] += self.direction[1]
+    def update(self, cs):
+        self.position[0] += self.direction[0] * cs
+        self.position[1] += self.direction[1] * cs
