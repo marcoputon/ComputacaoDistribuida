@@ -81,6 +81,7 @@ def get_peers():
                 for np in new_peers:
                     if np not in peers and peer != "http://" + my_ip:
                         peers.append(np)
+                        peers_dict[np] = False
             except:
                 pass
         time.sleep(0.05)
