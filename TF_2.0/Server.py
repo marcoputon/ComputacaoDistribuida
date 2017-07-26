@@ -139,18 +139,19 @@ def show_data():
     while True:
         screen.fill((40, 44, 52))
         for p in players:
-            players[p].update(cell_size)
-            c = 0
-            for m in players[p].path[1:]:
-                c2 = c + 1
-                rect = path_to_rect(players[p].path[c], players[p].path[c2], cell_size)
-                pygame.draw.rect(screen, players[p].color, rect, 0)
+            if peers_dict[p]:
+                players[p].update(cell_size)
+                c = 0
+                for m in players[p].path[1:]:
+                    c2 = c + 1
+                    rect = path_to_rect(players[p].path[c], players[p].path[c2], cell_size)
+                    pygame.draw.rect(screen, players[p].color, rect, 0)
 
-                c += 1
-            c2 = len(players[p].path) - 1
-            p_atual = [dict_dir[players[p].direction], players[p].position]
-            rect = path_to_rect(players[p].path[c2], p_atual, cell_size)
-            pygame.draw.rect(screen, players[p].color, rect, 0)
+                    c += 1
+                c2 = len(players[p].path) - 1
+                p_atual = [dict_dir[players[p].direction], players[p].position]
+                rect = path_to_rect(players[p].path[c2], p_atual, cell_size)
+                pygame.draw.rect(screen, players[p].color, rect, 0)
 
 
 
